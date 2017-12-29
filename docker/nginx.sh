@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# curl https://raw.githubusercontent.com/jwilder/nginx-proxy/master/nginx.tmpl > /vol/proxy/templates/nginx.tmpl
-
 docker stop nginx
 docker rm nginx
 
