@@ -38,4 +38,5 @@ docker run -d \
     --volumes-from nginx \
     -v /vol/proxy/certs:/etc/nginx/certs:rw \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    -e REUSE_ACCOUNT_KEYS=false \
     jrcs/letsencrypt-nginx-proxy-companion
