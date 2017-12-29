@@ -5,10 +5,8 @@ const redis = require('redis')
 const crypto = require('crypto')
 const Logger = require('./Logger')
 
-if (process.env.NODE_ENV !== 'test') {
-    bluebird.promisifyAll(redis.RedisClient.prototype)
-    bluebird.promisifyAll(redis.Multi.prototype)
-}
+bluebird.promisifyAll(redis.RedisClient.prototype)
+bluebird.promisifyAll(redis.Multi.prototype)
 
 class Db {
 

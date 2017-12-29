@@ -6,7 +6,7 @@
     "start": "node .",
     "lint": "eslint -c .eslintrc 'src/**/*.js' 'test/**/*.js'",
     "test": "export NODE_ENV=test && istanbul cover ./node_modules/.bin/_mocha test/unit/**/*.js test/unit/*.js",
-    "posttest": "istanbul check-coverage --statements 70 --branches 50 --functions 70 --lines 70",
+    "posttest": "istanbul check-coverage --statements 90 --branches 70 --functions 100 --lines 90",
     "test-no-coverage": "export NODE_ENV=test && mocha test/**/*.js"
   },
   "dependencies": {

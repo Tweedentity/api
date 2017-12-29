@@ -1,5 +1,13 @@
 /* globals Promise */
 
+
+class RedisClient {
+}
+
+class Multi {
+}
+
+
 class Client {
 
     constructor() {
@@ -37,6 +45,9 @@ class Client {
 }
 
 const redis = {
+
+    RedisClient,
+    Multi,
 
     createClient() {
         return new Client
