@@ -59,7 +59,6 @@ describe('api', function () {
                 .end(done)
         })
 
-
         it('should verify that the tweet exists and contains a valid signature', function (done) {
             request(app)
                 .get(`/verify-tweet/${tweetId}/${address}`)
@@ -88,7 +87,6 @@ describe('api', function () {
                 .end(done)
         })
     })
-
 
     describe('GET /verify-tweet/:id/:address', function () {
 
