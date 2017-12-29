@@ -1,0 +1,38 @@
+{
+  "name": "0xNIL-api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node .",
+    "lint": "eslint -c .eslintrc 'src/**/*.js' 'test/**/*.js'",
+    "test": "export NODE_ENV=test && istanbul cover ./node_modules/.bin/_mocha test/unit/**/*.js test/unit/*.js",
+    "posttest": "istanbul check-coverage --statements 85 --branches 85 --functions 85 --lines 85",
+    "test-no-coverage": "export NODE_ENV=test && mocha test/**/*.js"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "ethereumjs-util": "^5.1.2",
+    "express": "~4.15.2",
+    "fs-extra": "^4.0.1",
+    "log": "^1.4.0",
+    "morgan": "~1.8.1",
+    "redis": "^2.7.1",
+    "rotating-file-stream": "^1.2.2",
+    "twitter": "^1.7.1"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "eslint": "^3.19.0",
+    "eslint-plugin-react": "^6.10.3",
+    "istanbul": "^0.4.5",
+    "mocha": "^2.3.4",
+    "mocha-lcov-reporter": "^1.3.0",
+    "mockery": "^2.1.0",
+    "redis-mock": "^0.20.0",
+    "sinon": "^2.4.1",
+    "supertest": "^3.0.0"
+  }
+}
