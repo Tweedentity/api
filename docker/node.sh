@@ -14,7 +14,7 @@ source bin/.default.env && docker run -d \
   -e CONSUMER_SECRET="$CONSUMER_SECRET" \
   -e ACCESS_TOKEN_KEY="$ACCESS_TOKEN_KEY" \
   -e ACCESS_TOKEN_SECRET="$ACCESS_TOKEN_SECRET" \
-  -e VIRTUAL_HOST=api.0xnil.org \
-  -e LETSENCRYPT_HOST=0xnil.org,api.0xnil.org \
-  -e LETSENCRYPT_EMAIL=admin@0xnil.org \
+  -e VIRTUAL_HOST=0xnil.com,www.0xnil.com,api.0xnil.com \
+  -e LETSENCRYPT_HOST=0xnil.com,www.0xnil.com,api.0xnil.com \
+  -e LETSENCRYPT_EMAIL=admin@0xnil.com \
   -w /usr/src/app node:6 npm run start
