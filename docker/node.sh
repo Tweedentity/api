@@ -17,4 +17,5 @@ source docker/.default.env && docker run -d \
   -e VIRTUAL_HOST=0xnil.com,www.0xnil.com,api.0xnil.com \
   -e LETSENCRYPT_HOST=0xnil.com,www.0xnil.com,api.0xnil.com \
   -e LETSENCRYPT_EMAIL=admin@0xnil.com \
+  -e NODE_ENV=production \
   -w /usr/src/app node:6 npm run start

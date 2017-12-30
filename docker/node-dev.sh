@@ -11,5 +11,6 @@ source docker/.default.env && docker run -it --rm \
   -e ACCESS_TOKEN_KEY="$ACCESS_TOKEN_KEY" \
   -e ACCESS_TOKEN_SECRET="$ACCESS_TOKEN_SECRET" \
   -e VIRTUAL_HOST=api.felice0 \
+  -e NODE_ENV=development \
   -w /usr/src/app node:6 npm run start
 

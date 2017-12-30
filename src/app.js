@@ -54,7 +54,7 @@ app.use(function (req, res, next) {
 if (app.get('env') === 'development') {
     app.use((err, req, res, next) => {
         res.status(err.status || 500)
-        res.render('error', {
+        res.json({
             title: 'Error',
             message: err.message,
             error: process.env.DEBUG_MODE ? err : ''
@@ -70,7 +70,9 @@ app.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500)
-    res.render('error')
+    res.json({
+        error: true
+    })
 })
 
 module.exports = app

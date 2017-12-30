@@ -7,7 +7,7 @@ const mockery = require('mockery')
 
 const app = express()
 const constants = require('../../src/constants')
-const {address, tweetId} = require('../fixtures')
+const {address, tweetId, badTweetId, tweetIdWrongSig} = require('../fixtures')
 
 describe('api', function () {
 
@@ -47,14 +47,64 @@ describe('api', function () {
 
     describe('GET /verify-tweet/:id/:address', function () {
 
-        it('should not find the tweet', function (done) {
+        it('should return an error for wrong address', function (done) {
             request(app)
-                .get(`/verify-tweet/9${tweetId}/${address}`)
+                .get(`/verify-tweet/${tweetId}/some-wrong-address`)
                 .expect(200)
                 .expect(function (res) {
                     assert(res.body)
                     assert(res.body.success === false)
-                    assert(!res.body.confirmationCode)
+
+                })
+                .end(done)
+        })
+
+        it('should return an error for wrong tweetId', function (done) {
+            request(app)
+                .get(`/verify-tweet/some-wrong-id/${address}`)
+                .expect(200)
+                .expect(function (res) {
+                    assert(res.body)
+                    assert(res.body.success === false)
+
+                })
+                .end(done)
+        })
+
+        it('should return an error for missed referer in production', function (done) {
+
+            request(app)
+                .get(`/verify-tweet/${tweetId}/${address}?NODE_ENV=production`)
+                .expect(200)
+                .expect(function (res) {
+                    assert(res.body)
+                    assert(res.body.success === false)
+
+                })
+                .end(done)
+        })
+
+        it('should return an error for wrong referer in production', function (done) {
+
+            request(app)
+                .get(`/verify-tweet/${tweetId}/${address}?NODE_ENV=production&referer=example.com`)
+                .expect(200)
+                .expect(function (res) {
+                    assert(res.body)
+                    assert(res.body.success === false)
+
+                })
+                .end(done)
+        })
+
+        it('should not find the tweet', function (done) {
+            request(app)
+                .get(`/verify-tweet/99999999/${address}`)
+                .expect(200)
+                .expect(function (res) {
+                    assert(res.body)
+                    assert(res.body.success === false)
+                    assert(res.body.message === 'Something went wrong :o(')
                 })
                 .end(done)
         })
@@ -71,9 +121,53 @@ describe('api', function () {
                 })
                 .end(done)
         })
+
+        it('should fail because the signature is missed', function (done) {
+            request(app)
+                .get(`/verify-tweet/${badTweetId}/${address}`)
+                .expect(200)
+                .expect(function (res) {
+                    assert(res.body)
+                    assert(res.body.success === false)
+                })
+                .end(done)
+        })
+
+        it('should fail because the signature is wrong', function (done) {
+            request(app)
+                .get(`/verify-tweet/${tweetIdWrongSig}/${address}`)
+                .expect(200)
+                .expect(function (res) {
+                    assert(res.body)
+                    assert(res.body.success === false)
+                })
+                .end(done)
+        })
     })
 
     describe('GET /verify-cc/:cc/:address', function () {
+
+        it('should fails if wrong parameters', function (done) {
+            request(app)
+                .get(`/verify-cc/some-wrong-cc/${address}`)
+                .expect(200)
+                .expect(function (res) {
+                    assert(res.body)
+                    assert(res.body.success === false)
+                })
+                .end(done)
+        })
+
+        it('should fail if parameters are wrong', function (done) {
+            request(app)
+                .get(`/verify-cc/${confirmationCode}/some-wrong-address`)
+                .expect(200)
+                .expect(function (res) {
+                    assert(res.body)
+                    assert(res.body.success === false)
+                })
+                .end(done)
+        })
 
         it('should verify that there is a screenName for a specific address and confirmation code', function (done) {
             request(app)

@@ -11,5 +11,6 @@ source docker/.default.env && docker run -it --rm \
   -e ACCESS_TOKEN_KEY="$ACCESS_TOKEN_KEY" \
   -e ACCESS_TOKEN_SECRET="$ACCESS_TOKEN_SECRET" \
   -e VIRTUAL_HOST=felice0 \
+  -e NODE_ENV=test \
   -w /usr/src/app node:6 npm test
 
