@@ -2,7 +2,7 @@ const fs = require('./fs')
 const Log = require('log')
 const rfs = require('rotating-file-stream')
 
-const logDirectory = '/var/log/0xNIL'
+const logDirectory = '/var/log/tweedentity'
 
 fs.ensureDirSync(logDirectory)
 

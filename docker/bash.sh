@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-host=0xNIL-api
+host=tweedentity
 
 if [[ $1 != '' ]]; then
   host=$1

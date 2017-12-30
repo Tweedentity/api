@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 source docker/.default.env && docker run -it --rm \
-  --name 0xNIL-api-debug \
-  --link 0xNIL-redis:redis \
+  --name tweedentity-debug \
+  --link tweedentity-redis:redis \
   -p 9292 \
   -v $PWD:/usr/src/app \
-  -v $PWD/log:/var/log/0xNIL \
+  -v $PWD/log:/var/log/tweedentity \
   -e DEBUG_MODE=true \
   -e CONSUMER_KEY="$CONSUMER_KEY" \
   -e CONSUMER_SECRET="$CONSUMER_SECRET" \

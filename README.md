@@ -1,2 +1,2 @@
 # api
-Api server for 0xNIL
+API server for tweedentity

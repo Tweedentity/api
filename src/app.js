@@ -18,7 +18,7 @@ process.on('uncaughtException', function (error) {
 
 const app = express()
 
-const logDirectory = '/var/log/0xNIL-api'
+const logDirectory = '/var/log/tweedentity'
 fs.ensureDirSync(logDirectory)
 const accessLogStream = rfs('access.log', {
     interval: '1d', // rotate daily
@@ -33,12 +33,6 @@ app.use('/api/v1', api)
 app.use('/', (req, res) => {
     res.send(`<html>
 <head><script>
-var aliases = '0xnil.com,www.0xnil.com'.split(',')
-if (~aliases.indexOf(location.hostname)) {
-    location = location.href.replace(/http:/, 'https:').replace(RegExp(location.hostname), '0xnil.org')
-} else if (location.hostname === 'api.0xnil.org' && location.protocol === 'http:') {
-    location = location.href.replace(/http:/, 'https:')
-}
 </script></head>
 <body><div>${constants.WELCOME_MESSAGE}</div>
 </body></html>`)

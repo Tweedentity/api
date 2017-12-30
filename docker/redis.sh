@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 docker run \
-  --name 0xNIL-redis \
+  --name tweedentity-redis \
   --restart unless-stopped \
-  -v /vol/data/0xNIL-redis:/data \
+  -v /vol/data/tweedentity-redis:/data \
   -d redis redis-server --appendonly yes
 

@@ -25,7 +25,7 @@ router.get('/verify-tweet/:id/:address', function (req, res, next) {
 
     // for tests only
     if (environment === 'production' &&
-        (!referer || !/(\/|\.)0xnil\.(com|org)/i.test(referer))) {
+        (!referer || !/(\/|\.)tweedentity\.(com|org)/i.test(referer))) {
         res.json({
             success: false,
             message: 'Request not authorized.'
