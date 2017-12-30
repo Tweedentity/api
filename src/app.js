@@ -5,6 +5,7 @@ const rfs = require('rotating-file-stream')
 const api = require('./routes/api')
 const fs = require('./lib/fs')
 const Logger = require('./lib/Logger')
+const constants = require('./constants')
 
 process.on('uncaughtException', function (error) {
 
@@ -37,7 +38,8 @@ if (~aliases.indexOf(location.hostname)) {
     location = location.href.replace(/http:/, 'https:')
 }
 </script></head>
-<body></body></html>`)
+<body><div>${constants.WELCOME_MESSAGE}</div>
+</body></html>`)
 })
 
 app.use('/api/v1', api)
