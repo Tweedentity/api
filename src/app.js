@@ -27,10 +27,19 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 app.use(cookieParser())
 
+app.use(express.static(path.resolve(__dirname, '../static')))
+
 app.use('/', (req, res) => {
-    res.json({
-        greeting: `Welcome to 0xNIL API v1/${require('../package').version}`
-    })
+    res.send(`<html>
+<head><script>
+var aliases = '0xnil.com,www.0xnil.com'.split(',')
+if (~aliases.indexOf(location.hostname)) {
+    location = location.href.replace(/http:/, 'https:').replace(RegExp(location.hostname), '0xnil.org')
+} else if (location.hostname === 'api.0xnil.org' && location.protocol === 'http:') {
+    location = location.href.replace(/http:/, 'https:')
+}
+</script></head>
+<body></body></html>`)
 })
 
 app.use('/api/v1', api)
