@@ -1,7 +1,11 @@
 {
-  "name": "0xNIL-api",
+  "name": "tweedentity-api",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tweedentity/api"
+  },
   "version": "0.0.1",
-  "private": true,
   "scripts": {
     "start": "node .",
     "lint": "eslint -c .eslintrc 'src/**/*.js' 'test/**/*.js'",
