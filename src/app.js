@@ -5,6 +5,7 @@ const rfs = require('rotating-file-stream')
 const api = require('./routes/api')
 const fs = require('./lib/fs')
 const Logger = require('./lib/Logger')
+const constants = require('./constants')
 
 process.on('uncaughtException', function (error) {
 
@@ -27,13 +28,21 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 app.use(cookieParser())
 
-app.use('/', (req, res) => {
-    res.json({
-        greeting: `Welcome to 0xNIL API v1/${require('../package').version}`
-    })
-})
-
 app.use('/api/v1', api)
+
+app.use('/', (req, res) => {
+    res.send(`<html>
+<head><script>
+var aliases = '0xnil.com,www.0xnil.com'.split(',')
+if (~aliases.indexOf(location.hostname)) {
+    location = location.href.replace(/http:/, 'https:').replace(RegExp(location.hostname), '0xnil.org')
+} else if (location.hostname === 'api.0xnil.org' && location.protocol === 'http:') {
+    location = location.href.replace(/http:/, 'https:')
+}
+</script></head>
+<body><div>${constants.WELCOME_MESSAGE}</div>
+</body></html>`)
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -45,7 +54,7 @@ app.use(function (req, res, next) {
 if (app.get('env') === 'development') {
     app.use((err, req, res, next) => {
         res.status(err.status || 500)
-        res.render('error', {
+        res.json({
             title: 'Error',
             message: err.message,
             error: process.env.DEBUG_MODE ? err : ''
@@ -61,7 +70,9 @@ app.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500)
-    res.render('error')
+    res.json({
+        error: true
+    })
 })
 
 module.exports = app
