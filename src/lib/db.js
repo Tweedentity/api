@@ -51,15 +51,11 @@ class Db {
         return this.getConfirmationCodeAndScreenName(address)
             .then(data => {
                 if (data && data.cc === confirmationCode) {
-
-                    console.log(data)
-
                     if (data.c) {
                         return Promise.resolve(data.sn)
                     } else {
-                        return this.client.hsetAsync(`v:${address}`, {
-                            c: this.now()
-                        }).then(() => Promise.resolve(data.sn))
+                        return this.client.hsetAsync(`v:${address}`, 'c', this.now())
+                            .then(() => Promise.resolve(data.sn))
                     }
                 } else {
                     return Promise.resolve()
