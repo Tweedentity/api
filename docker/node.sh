@@ -3,7 +3,7 @@
 docker stop 0xNIL-api
 docker rm 0xNIL-api
 
-source bin/.default.env && docker run -d \
+source docker/.default.env && docker run -d \
   --name 0xNIL-api \
   --link 0xNIL-redis:redis \
   -p 9292 \

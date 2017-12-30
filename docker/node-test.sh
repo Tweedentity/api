@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source bin/.default.env && docker run -it --rm \
+source docker/.default.env && docker run -it --rm \
   --name 0xNIL-api-dev \
   --link 0xNIL-redis:redis \
   -p 9292:9292 \
