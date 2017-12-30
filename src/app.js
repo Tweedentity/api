@@ -28,6 +28,8 @@ app.use(morgan('combined', {stream: accessLogStream}))
 
 app.use(cookieParser())
 
+app.use('/api/v1', api)
+
 app.use('/', (req, res) => {
     res.send(`<html>
 <head><script>
@@ -41,8 +43,6 @@ if (~aliases.indexOf(location.hostname)) {
 <body><div>${constants.WELCOME_MESSAGE}</div>
 </body></html>`)
 })
-
-app.use('/api/v1', api)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
