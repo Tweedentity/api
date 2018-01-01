@@ -104,7 +104,7 @@ describe('api', function () {
                 .expect(function (res) {
                     assert(res.body)
                     assert(res.body.success === false)
-                    assert(res.body.message === 'Something went wrong :o(')
+                    assert(res.body.message === 'Tweet without a valid signature.')
                 })
                 .end(done)
         })

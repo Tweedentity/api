@@ -9,11 +9,12 @@ const constants = require('../constants')
 
 router.get('/verify-tweet/:id/:address', function (req, res, next) {
 
-    const tweedId = req.params.id
+    const id = req.params.id
     const address = req.params.address
     let referer = req.header('Referer')
     let environment = req.app.get('env')
 
+    // for tests only
     if (req.app.get('env') === 'test') {
         if (req.query.referer) {
             referer = req.query.referer
@@ -23,14 +24,13 @@ router.get('/verify-tweet/:id/:address', function (req, res, next) {
         }
     }
 
-    // for tests only
     if (environment === 'production' &&
         (!referer || !/(\/|\.)tweedentity\.(com|org)/i.test(referer))) {
         res.json({
             success: false,
             message: 'Request not authorized.'
         })
-    } else if (!/^0x[A-F0-9]{40}$/i.test(address) || !/^\d+$/.test(tweedId)) {
+    } else if (!/^0x[A-F0-9]{40}$/i.test(address) || !/^\d+$/.test(id)) {
         res.json({
             success: false,
             message: 'Wrong parameters.'
@@ -39,7 +39,7 @@ router.get('/verify-tweet/:id/:address', function (req, res, next) {
 
         res.set('Access-Control-Allow-Origin', '*')
 
-        twitterClient.getTweet(tweedId)
+        twitterClient.getTweet(id)
             .then(response => {
                 let sig
                 let screenName
@@ -50,7 +50,7 @@ router.get('/verify-tweet/:id/:address', function (req, res, next) {
                 if (sig && ethereum.verifySignature(screenName.toLowerCase(), address, sig)) {
                     return db.setConfirmationCode(address, screenName, sig)
                 } else {
-                    return Promise.reject()
+                    return Promise.reject('Tweet without a valid signature.')
                 }
             })
             .then(confirmationCode => {
@@ -60,10 +60,18 @@ router.get('/verify-tweet/:id/:address', function (req, res, next) {
                 })
             })
             .catch(err => {
-                res.json({
-                    success: false,
-                    message: 'Something went wrong :o('
+                return db.logError({
+                    api: 'GET /verify-tweet/:id/:address',
+                    params: {id, address},
+                    error: err
                 })
+                    .then(() => {
+
+                        res.json({
+                            success: false,
+                            message: typeof err === 'string' ? err : 'Something went wrong :o('
+                        })
+                    })
             })
     }
 })
@@ -96,9 +104,17 @@ router.get('/verify-cc/:cc/:address', function (req, res, next) {
                 }
             })
             .catch(err => {
-                res.json({
-                    success: false
+                return db.logError({
+                    api: 'GET /verify-cc/:cc/:address',
+                    params: {cc, address},
+                    error: err
                 })
+                    .then(() => {
+
+                        res.json({
+                            success: false
+                        })
+                    })
             })
     }
 })

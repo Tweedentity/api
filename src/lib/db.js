@@ -63,6 +63,10 @@ class Db {
             })
     }
 
+    logError(data) {
+        return this.client.hsetAsync(`log:errors`, new Date().toISOString(), JSON.stringify(data))
+    }
+
 }
 
 module.exports = new Db
