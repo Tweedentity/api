@@ -14,8 +14,8 @@ source docker/.default.env && docker run -d \
   -e CONSUMER_SECRET="$CONSUMER_SECRET" \
   -e ACCESS_TOKEN_KEY="$ACCESS_TOKEN_KEY" \
   -e ACCESS_TOKEN_SECRET="$ACCESS_TOKEN_SECRET" \
-  -e VIRTUAL_HOST=tweedentity.com,www.tweedentity.com \
-  -e LETSENCRYPT_HOST=tweedentity.com,www.tweedentity.com \
+  -e VIRTUAL_HOST=tweedentity.com,www.tweedentity.com,api.tweedentity.com \
+  -e LETSENCRYPT_HOST=tweedentity.com,www.tweedentity.com,api.tweedentity.com \
   -e LETSENCRYPT_EMAIL=admin@tweedentity.com \
   -e NODE_ENV=production \
   -w /usr/src/app node:6 npm run start
