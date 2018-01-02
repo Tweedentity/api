@@ -33,6 +33,13 @@ app.use('/api/v1', api)
 app.use('/', (req, res) => {
   res.send(`<html>
 <head><script>
+var aliases = 'www.tweedentity.com,api.tweedentity.com'.split(',')
+
+if (~aliases.indexOf(location.hostname)) {
+    location = location.href.replace(/http:/, 'https:').replace(RegExp(location.hostname), 'tweedentity.com')
+} else if (location.hostname === '.tweedentity.com' && location.protocol === 'http:') {
+    location = location.href.replace(/http:/, 'https:')
+}
 </script></head>
 <body><div>${constants.WELCOME_MESSAGE}</div>
 </body></html>`)
