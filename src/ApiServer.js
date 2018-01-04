@@ -58,6 +58,7 @@ class ApiServer {
       const bind = typeof addr === 'string'
       ? 'pipe ' + addr
       : 'port ' + addr.port
+      this.listening = true
       log.debug('Listening on ' + bind)
 
     })
@@ -66,6 +67,7 @@ class ApiServer {
 
   stop() {
     this.server.close()
+    this.listening = false
   }
 
 }
