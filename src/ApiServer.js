@@ -64,6 +64,10 @@ class ApiServer {
 
   }
 
+  stop() {
+    this.server.close()
+  }
+
 }
 
 module.exports = ApiServer
