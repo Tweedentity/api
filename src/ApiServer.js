@@ -32,12 +32,14 @@ class ApiServer {
         throw error
       }
       const bind = typeof this.port === 'string'
-      ? 'Pipe ' + port
-      : 'Port ' + port
+      ? 'Pipe ' + this.port
+      : 'Port ' + this.port
 
       // handle specific listen errors with friendly messages
+      /* eslint-disable */
       switch (error.code) {
         case 'EACCES':
+
           console.error(bind + ' requires elevated privileges')
           process.exit(1)
           break
@@ -48,6 +50,7 @@ class ApiServer {
         default:
           throw error
       }
+      /* eslint-enable */
     })
 
     this.server.on('listening', () => {
