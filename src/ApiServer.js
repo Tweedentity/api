@@ -39,11 +39,11 @@ class ApiServer {
     })
   }
 
-  start(callback = noop) {
+  start(done = noop) {
 
     this.server = app.listen(this.port, () => {
       Logger.info(`Test server listening on port ${ this.port }`)
-      callback()
+      done()
     })
   }
 
