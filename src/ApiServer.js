@@ -23,9 +23,9 @@ class ApiServer {
     return false
   }
 
-  start() {
+  start(callback = new Function()) {
 
-    this.server.listen(this.port)
+    this.server.listen(this.port, callback)
 
     this.server.on('error', error => {
       if (error.syscall !== 'listen') {
