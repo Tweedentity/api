@@ -3,7 +3,7 @@ const url = require('url')
 const request = require('superagent')
 
 const hostname = '127.0.0.1'
-const port = 3132
+const port = 9093
 
 function resError(res, err) {
   res.statusCode = 500
@@ -13,7 +13,10 @@ function resError(res, err) {
 
 const server = http.createServer((req, res) => {
 
-  const pathname = url.parse(req.url).pathname.split('/')
+  let pathname = url.parse(req.url).pathname
+  console.log('GET '+pathname)
+
+  pathname = pathname.split('/')
   const screenName = pathname[1]
   const id = pathname[2]
 
@@ -25,7 +28,6 @@ const server = http.createServer((req, res) => {
         let content = res2.text.match(/"og:description" content="[^"]+"/)[0].split('"')[3].replace(/^.{1}|.{1}$/g,'')
 
         if (content.length == 132) {
-
           res.statusCode = 200
           res.setHeader('Content-Type', 'text/plain')
           res.end(content)

@@ -5,7 +5,7 @@ docker rm tweedentity
 
 docker run -d \
   --name tweedentity-api \
-  -p 3132 \
+  -p 9093 \
   --restart unless-stopped \
   -v $PWD:/usr/src/app \
   -e VIRTUAL_HOST=api.tweedentity.com \
