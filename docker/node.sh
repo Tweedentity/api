@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-docker stop tweedentity
-docker rm tweedentity
+docker stop tweedentity-api
+docker stop tweedentity-api-debug
+docker rm tweedentity-api
+docker rm tweedentity-api-debug
 
 docker run -d \
   --name tweedentity-api \
