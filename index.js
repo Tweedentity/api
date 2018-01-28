@@ -20,8 +20,6 @@ function log(what) {
 
 const server = http.createServer((req, res) => {
 
-  res.setHeader('Content-Type', 'text/plain')
-
   let pathname = url.parse(req.url).pathname
   if (pathname === '/favicon.ico') {
     res.end()
