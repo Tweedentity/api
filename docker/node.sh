@@ -11,7 +11,7 @@ docker run -d \
   -p 9093 \
   --restart unless-stopped \
   -v $PWD:/usr/src/app \
-  -e VIRTUAL_HOST=api.tweedentity.com \
+  -e VIRTUAL_HOST=tweedentity.com,www.tweedentity.com,api.tweedentity.com \
   -e LETSENCRYPT_HOST=tweedentity.com,www.tweedentity.com,api.tweedentity.com \
   -e LETSENCRYPT_EMAIL=admin@tweedentity.com \
   -e NODE_ENV=production \
