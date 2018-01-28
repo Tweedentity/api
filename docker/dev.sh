@@ -7,4 +7,4 @@ docker run -it --rm \
   -v $PWD/log:/var/log/tweedentity-api \
   -e NODE_ENV=development \
   -e VIRTUAL_HOST=api.tweedentity.com.localhost \
-  -w /usr/src/app node:6 npm run start
+  -w /usr/src/app node:carbon npm run start

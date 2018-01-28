@@ -15,4 +15,4 @@ docker run -d \
   -e LETSENCRYPT_HOST=tweedentity.com,www.tweedentity.com,api.tweedentity.com \
   -e LETSENCRYPT_EMAIL=admin@tweedentity.com \
   -e NODE_ENV=production \
-  -w /usr/src/app node:6 npm run start
+  -w /usr/src/app node:carbon npm run start
