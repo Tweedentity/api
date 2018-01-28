@@ -9,7 +9,6 @@ const port = 9093
 
 function resError(res, err) {
   log(err)
-  res.statusCode = 500
   res.json({success: false, err})
 }
 
@@ -25,6 +24,8 @@ const server = http.createServer((req, res) => {
     res.end()
     return
   }
+
+  res.statusCode = 200
 
   const [tmp, screenName, id, address] = pathname.split('/')
 
