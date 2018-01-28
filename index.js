@@ -7,11 +7,6 @@ const web3 = new require('web3')
 
 const port = 9093
 
-function resError(res, err) {
-  log(err)
-  res.json({success: false, err})
-}
-
 function log(what) {
   console.log(what)
   fs.appendFileSync('access.log', new Date().toISOString() + ' ' + what + '\n')
@@ -19,6 +14,14 @@ function log(what) {
 
 const server = http.createServer((req, res) => {
 
+  function respond(err) {
+    log(err)
+    let response = {success: true}
+    if (err) {
+      response = {success: false, error: err}
+    }
+    res.end(JSON.stringify(response))
+  }
   let pathname = url.parse(req.url).pathname
   if (pathname === '/favicon.ico') {
     res.end()
@@ -26,6 +29,7 @@ const server = http.createServer((req, res) => {
   }
 
   res.statusCode = 200
+  res.setHeader('Content-Type', 'text/javascript')
 
   const [tmp, screenName, id, address] = pathname.split('/')
 
@@ -50,19 +54,18 @@ const server = http.createServer((req, res) => {
           const pub = utils.ecrecover(msgHash, v, r, s)
           const addr = utils.setLength(utils.fromSigned(utils.pubToAddress(pub)), 20)
           if (utils.bufferToHex(addr).toLowerCase() === address.toLowerCase()) {
-            res.statusCode = 200
-            res.json({success: true})
-          } else resError(res, 'Wrong signature.') // wrong signature
-        } else resError(res, 'Wrong tweet.') // wrong tweet
+            respond()
+          } else respond('Wrong signature.') // wrong signature
+        } else respond('Wrong tweet or signature.') // wrong tweet
 
       }
     })
     .catch(function (err) {
       log('ERROR ' + err)
-      resError(res, 'Error.')
+      respond('Wrong tweet.')
     })
 
-  } else resError(res, 'Error.') // wrong parameters
+  } else respond('Error.') // wrong parameters
 })
 server.on('clientError', (err, socket) => {
   socket.end('HTTP/1.1 400 Bad Request\r\n\r\n')
