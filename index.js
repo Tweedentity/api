@@ -8,8 +8,9 @@ const web3 = new require('web3')
 const port = 9093
 
 function resError(res, err) {
+  log(err)
   res.statusCode = 500
-  res.end(err)
+  res.json({success: false, err})
 }
 
 function log(what) {
@@ -51,18 +52,18 @@ const server = http.createServer((req, res) => {
           const addr = utils.setLength(utils.fromSigned(utils.pubToAddress(pub)), 20)
           if (utils.bufferToHex(addr).toLowerCase() === address.toLowerCase()) {
             res.statusCode = 200
-            res.end('true')
-          } else resError(res, 'error3') // wrong signature
-        } else resError(res, 'error2') // wrong tweet
+            res.json({success: true})
+          } else resError(res, 'Wrong signature.') // wrong signature
+        } else resError(res, 'Wrong tweet.') // wrong tweet
 
       }
     })
     .catch(function (err) {
       log('ERROR ' + err)
-      resError(res, 'error1')
+      resError(res, 'Error.')
     })
 
-  } else resError(res, 'error0') // wrong parameters
+  } else resError(res, 'Error.') // wrong parameters
 })
 server.on('clientError', (err, socket) => {
   socket.end('HTTP/1.1 400 Bad Request\r\n\r\n')
