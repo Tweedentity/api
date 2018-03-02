@@ -6,8 +6,8 @@ docker rm tweedentity-api
 docker stop tweedentity-api-debug
 docker rm tweedentity-api-debug
 
-docker run -d \
-  --name tweedentity-api \
+docker run -it \
+  --name tweedentity-api-debug \
   -p 9093 \
   --restart unless-stopped \
   -v $PWD:/usr/src/app \
