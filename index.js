@@ -27,14 +27,15 @@ const server = http.createServer((req, res) => {
   res.statusCode = 200
   res.setHeader('Content-Type', 'text/plain')
 
-  const [tmp, screenName, id, address] = pathname.split('/')
+  const [tmp, identitySource, screenName, id, address] = pathname.split('/')
 
   function respond(err, val) {
     log(val || '0', err || '')
     res.end(val || '')
   }
 
-  if (id && /^[a-z0-9_]+$/i.test(screenName) && screenName.length <= 15 && /^\d{18,20}$/.test(id) && id.length < 20 && web3.utils.isAddress(address)) {
+  if (identitySource === 't' // twitter
+  && id && /^[a-z0-9_]+$/i.test(screenName) && screenName.length <= 15 && /^\d{18,20}$/.test(id) && id.length < 20 && web3.utils.isAddress(address)) {
 
     log('GET ' + pathname)
 
@@ -45,8 +46,8 @@ const server = http.createServer((req, res) => {
     .then(function (tweet) {
       if (tweet.text) {
         const $ = cheerio.load(tweet.text)
-        const content = $('meta[property="og:description"]').attr('content').replace(/[^x0-9a-f]+/g,'')
-        const userId = $('div[data-tweet-id="'+id+'"]').attr('data-user-id')
+        const content = $('meta[property="og:description"]').attr('content').replace(/[^x0-9a-f]+/g, '')
+        const userId = $('div[data-tweet-id="' + id + '"]').attr('data-user-id')
         if (/^0x[0-9a-f]{130}/.test(content) && /^\w+$/.test(userId)) {
 
           const msgHash = utils.hashPersonalMessage(utils.toBuffer(`${screenName}@tweedentity`))
