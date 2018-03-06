@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
         const userId = $('div[data-tweet-id="' + id + '"]').attr('data-user-id')
         if (/^0x[0-9a-f]{130}/.test(content) && /^\w+$/.test(userId)) {
 
-          const msgHash = utils.hashPersonalMessage(utils.toBuffer(`${screenName}@tweedentity`))
+          const msgHash = utils.hashPersonalMessage(utils.toBuffer(`twitter/${userId}@tweedentity`))
           const sgn = utils.stripHexPrefix(content)
           const r = new Buffer(sgn.slice(0, 64), 'hex')
           const s = new Buffer(sgn.slice(64, 128), 'hex')
