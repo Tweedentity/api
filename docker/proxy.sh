@@ -24,7 +24,7 @@ docker run -d \
     --name nginx-gen \
     --restart unless-stopped \
     --volumes-from nginx \
-    -v /vol/proxy/templates/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro \
+    -v /vol/etc/nginx/templates/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
     --label com.github.jrcs.letsencrypt_nginx_proxy_companion.docker_gen \
     jwilder/docker-gen \
