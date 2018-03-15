@@ -6,3 +6,7 @@ package-lock.json
 access.log
 log
 .scratch
+jspm_packages
+
+# Serverless directories
+.serverless

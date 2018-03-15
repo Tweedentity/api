@@ -1,0 +1,25 @@
+service: tweeapi
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+functions:
+  tweet:
+    handler: handler.tweet
+
+    events:
+      - http:
+          path: tweet/{tweetId}/{address}
+          method: get
+
+plugins:
+  - serverless-offline
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: api.tweedentity.net
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: true
