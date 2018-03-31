@@ -32,14 +32,15 @@ class Db {
     })
   }
 
-  put(userId, screenName, name, callback) {
+  put(userId, screenName, name, address, callback) {
 
     const params = {
       TableName: this.table,
       Item: {
         userId,
         screenName,
-        name
+        name,
+        address
       }
     }
     dynamoDb.put(params, (error) => {
