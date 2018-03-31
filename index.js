@@ -3,29 +3,50 @@
 const request = require('superagent')
 const utils = require('ethereumjs-util')
 const cheerio = require('cheerio')
+const serverless = require('serverless-http')
 
-module.exports.tweet = (event, context, callback) => {
+const express = require('express')
+const app = express()
+
+const db = require('./db')
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the Tweedentity API')
+})
+
+app.get('/tweeter/:userId', (req, res) => {
+
+  db.get(req.params.userId, (error, result) => {
+    if (error) {
+      console.log('Error:', error)
+      res.status(400).json(error)
+    } else {
+      res.jsonp(result)
+    }
+  })
+})
+
+app.get('/tweet/:tweetId/:address', (req, res) => {
 
   function respond(err, val) {
-    if (err) console.log(err)
-    const response = {
-      statusCode: 200,
-      body: val || ''
-    }
-    callback(null, response)
+    if (err) console.log('Error', err)
+    res.send(val)
   }
 
-  const {tweetId, address} = event.pathParameters
+  const {tweetId, address} = req.params
 
   if (tweetId && /^\d{18,20}$/.test(tweetId) && tweetId.length < 20 && /0x[0-9a-fA-F]{40}/.test(address)) {
 
     request
     .get(`https://twitter.com/twitter/status/${tweetId}`)
-    .then(function (tweet) {
+    .then(tweet => {
       if (tweet.text) {
         const $ = cheerio.load(tweet.text)
         const content = $('meta[property="og:description"]').attr('content').replace(/[^x0-9a-f]+/g, '')
         const userId = $('div[data-tweet-id="' + tweetId + '"]').attr('data-user-id')
+        const screenName = $('div[data-tweet-id="' + tweetId + '"]').attr('data-screen-name')
+        const name = $('div[data-tweet-id="' + tweetId + '"]').attr('data-name')
+
         if (/^0x[0-9a-f]{130}/.test(content) && /^\w+$/.test(userId)) {
 
           const msgHash = utils.hashPersonalMessage(utils.toBuffer(`twitter/${userId}@tweedentity`))
@@ -40,18 +61,28 @@ module.exports.tweet = (event, context, callback) => {
           const addr = utils.setLength(utils.fromSigned(utils.pubToAddress(pub)), 20)
 
           if (utils.bufferToHex(addr).toLowerCase() === address.toLowerCase()) {
-            respond(null, userId)
+            db.put(userId, screenName, name, (err) => {
+              if (err) {
+                console.log('Error', err)
+              }
+              respond(null, userId)
+            })
           } else respond('wrong-sig') // wrong signature
         } else respond('wrong-tweet') // wrong tweet
 
       }
     })
-    .catch(function (err) {
+    .catch(() => {
       respond('catch-error')
     })
   } else {
     respond('wrong-pars')
   }
 
-}
+})
 
+app.use((req, res) => {
+  res.status(404).send('Not found')
+})
+
+module.exports.handler = serverless(app)
