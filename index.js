@@ -42,16 +42,25 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
     .then(tweet => {
       if (tweet.text) {
         const $ = cheerio.load(tweet.text)
-        const content = $('meta[property="og:description"]').attr('content').replace(/[^x0-9a-f]+/g, '')
+        const content = $('meta[property="og:description"]').attr('content').replace(/^(|.+)tweedentity\(/, '').replace(/\)(|.+)$/,'').split(',')
+
         const dataTweet = $('div[data-tweet-id="' + tweetId + '"]')
         const userId = dataTweet.attr('data-user-id')
         const screenName = dataTweet.attr('data-screen-name')
         const name = dataTweet.attr('data-name')
 
-        if (/^0x[0-9a-f]{130}/.test(content) && /^\w+$/.test(userId)) {
+        const message = `twitter/${userId}@tweedentity`
+        const address0 = content[0].toLowerCase()
+        const message0 = `${content[1]}@tweedentity`
+        const sig = content[2]
+        const sigVer = content[3]
+        const signer = content[4].split(':')[0]
+        const version = content[4].split(':')[1]
 
-          const msgHash = utils.hashPersonalMessage(utils.toBuffer(`twitter/${userId}@tweedentity`))
-          const sgn = utils.stripHexPrefix(content)
+        if (version === '1' && address0 === address && /^\w+$/.test(userId) && message0 === message && /^0x[0-9a-f]{130}/.test(sig)) {
+
+          const msgHash = utils.hashPersonalMessage(utils.toBuffer(message))
+          const sgn = utils.stripHexPrefix(sig)
           const r = new Buffer(sgn.slice(0, 64), 'hex')
           const s = new Buffer(sgn.slice(64, 128), 'hex')
           let v = parseInt(sgn.slice(128, 130), 16)
@@ -60,7 +69,6 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
           }
           const pub = utils.ecrecover(msgHash, v, r, s)
           const addr = utils.setLength(utils.fromSigned(utils.pubToAddress(pub)), 20)
-
           if (utils.bufferToHex(addr).toLowerCase() === address.toLowerCase()) {
             db.put(userId, screenName, name, address, (err) => {
               if (err) {
@@ -73,7 +81,8 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
 
       }
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log(err)
       respond('catch-error')
     })
   } else {
