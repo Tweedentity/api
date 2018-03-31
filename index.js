@@ -43,9 +43,10 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
       if (tweet.text) {
         const $ = cheerio.load(tweet.text)
         const content = $('meta[property="og:description"]').attr('content').replace(/[^x0-9a-f]+/g, '')
-        const userId = $('div[data-tweet-id="' + tweetId + '"]').attr('data-user-id')
-        const screenName = $('div[data-tweet-id="' + tweetId + '"]').attr('data-screen-name')
-        const name = $('div[data-tweet-id="' + tweetId + '"]').attr('data-name')
+        const dataTweet = $('div[data-tweet-id="' + tweetId + '"]')
+        const userId = dataTweet.attr('data-user-id')
+        const screenName = dataTweet.attr('data-screen-name')
+        const name = dataTweet.attr('data-name')
 
         if (/^0x[0-9a-f]{130}/.test(content) && /^\w+$/.test(userId)) {
 
