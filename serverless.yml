@@ -30,7 +30,7 @@ plugins:
   - serverless-domain-manager
 
 custom:
-  tableName: 'tweedentities-data'
+  tableName: 'tweedentity-data'
   customDomain:
     domainName: api.tweedentity.net
     basePath: ''

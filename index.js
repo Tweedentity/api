@@ -62,7 +62,7 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
           const addr = utils.setLength(utils.fromSigned(utils.pubToAddress(pub)), 20)
 
           if (utils.bufferToHex(addr).toLowerCase() === address.toLowerCase()) {
-            db.put(userId, screenName, name, (err) => {
+            db.put(userId, screenName, name, address, (err) => {
               if (err) {
                 console.log('Error', err)
               }
