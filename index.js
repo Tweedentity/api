@@ -35,7 +35,7 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
 
   const {tweetId, address} = req.params
 
-  if (tweetId && /^\d{18,20}$/.test(tweetId) && tweetId.length < 20 && /0x[0-9a-fA-F]{40}/.test(address)) {
+  if (tweetId && /^\d{18,20}$/.test(tweetId) && tweetId.length < 20 && /^0x[0-9a-fA-F]{40}$/.test(address)) {
 
     request
     .get(`https://twitter.com/twitter/status/${tweetId}`)
@@ -83,10 +83,10 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
     })
     .catch((err) => {
       console.log(err)
-      respond('catch-error')
+      respond('catch-error', 'catch-error')
     })
   } else {
-    respond('wrong-pars')
+    respond('wrong-pars', 'wrong-pars')
   }
 
 })

@@ -1,6 +1,7 @@
 const sinon = require('sinon');
 const request = require('supertest');
 const db = require('../db');
+const superagent = require('superagent');
 const {app} = require('../');
 
 describe('Tweedentity Api integration tests', function () {
@@ -68,6 +69,67 @@ describe('Tweedentity Api integration tests', function () {
 				.expect('Content-Type', 'application/json; charset=utf-8')
 				.expect(JSON.stringify('fake'));
 		});
+	});
+
+	describe('GET /tweet/:tweetId/:address tests', function () {
+		let superagentGet;
+
+		before(function () {
+			superagentGet = sinon.stub(superagent, 'get');
+		});
+
+		afterEach(function () {
+			superagentGet.reset();
+		});
+
+		after(function () {
+			superagentGet.restore();
+		});
+
+		it('should validate the params - bad twitter id too short', function () {
+			return request(app)
+				.get('/tweet/1234/0x0123456789012345678901234567890123456789')
+				.expect('wrong-pars');
+		});
+
+		it('should validate the params - bad twitter id too long', function () {
+			return request(app)
+				.get('/tweet/12345678901234567891/0x0123456789012345678901234567890123456789')
+				.expect('wrong-pars');
+		});
+
+		it('should validate the params - bad twitter id not all digits', function () {
+			return request(app)
+				.get('/tweet/abc4567890123456789/0x0123456789012345678901234567890123456789adgdfgdfsgdfgdsfgsdfgsdf')
+				.expect('wrong-pars');
+		});
+
+		it('should validate the params - bad wallet address too short', function () {
+			return request(app)
+				.get('/tweet/1234567890123456789/0x01234')
+				.expect('wrong-pars');
+		});
+
+		it('should validate the params - bad wallet address too long', function () {
+			return request(app)
+				.get('/tweet/1234567890123456789/0x01234567890123456789012345678901234567890')
+				.expect('wrong-pars');
+		});
+
+		it('should validate the params - bad wallet characters', function () {
+			return request(app)
+				.get('/tweet/1234567890123456789/0x0***456789012345678901234567890123456789')
+				.expect('wrong-pars');
+		});
+
+		it('', function () {
+			superagentGet.callsFake(_ => Promise.reject('fake'));
+
+			return request(app)
+				.get('/tweet/1234567890123456789/0x0123456789012345678901234567890123456789')
+				.expect('catch-error');
+		});
+
 	});
 
 });
