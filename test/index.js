@@ -29,6 +29,12 @@ describe('Tweedentity Api integration tests', function () {
 			.expect(200);
 	});
 
+	it('should 404 for bad route', function () {
+		return request(app)
+			.get('/fake')
+			.expect(404);
+	});
+
 	it('should respond 200 for GET /tweeter/:userId', function () {
 		return request(app)
 			.get('/tweeter/1234')
@@ -57,6 +63,5 @@ describe('Tweedentity Api integration tests', function () {
 			.expect('Content-Type', 'application/json; charset=utf-8')
 			.expect(JSON.stringify('fake'));
 	});
-
 
 });

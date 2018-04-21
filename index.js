@@ -91,9 +91,7 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
 
 })
 
-app.use((req, res) => {
-  res.status(404).send('Not found')
-})
+app.use((req, res) => res.sendStatus(404))
 
 exports.app = app
 exports.handler = serverless(app)
