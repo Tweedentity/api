@@ -95,4 +95,5 @@ app.use((req, res) => {
   res.status(404).send('Not found')
 })
 
-module.exports.handler = serverless(app)
+exports.app = app
+exports.handler = serverless(app)
