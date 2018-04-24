@@ -2,11 +2,13 @@
   "name": "tweeapi",
   "description": "A simple API to retrieve and verify a signed tweet for Tweedentity",
   "license": "MIT",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "handler.js",
   "author": "Francesco Sullo <francesco@sullo.co>",
   "scripts": {
-    "test": "mocha --recursive test"
+    "test": "mocha --recursive test",
+    "startLocal": "serverless offline start",
+    "deploy": "sls deploy"
   },
   "devDependencies": {
     "mocha": "^5.1.1",
