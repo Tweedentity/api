@@ -42,7 +42,11 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
     .then(tweet => {
       if (tweet.text) {
         const $ = cheerio.load(tweet.text)
-        const content = $('meta[property="og:description"]').attr('content').replace(/^(|.+)tweedentity\(/, '').replace(/\)(|.+)$/,'').split(',')
+
+        const tmp = $('meta[property="og:description"]').attr('content').replace(/^(|.+)tweedentity\(/, '').replace(/\)(|.+)$/,'').split(';')
+
+        const content = tmp[0].split(',')
+        const meta = tmp[1].split(',')
 
         const dataTweet = $('div[data-tweet-id="' + tweetId + '"]')
         const userId = dataTweet.attr('data-user-id')
@@ -55,9 +59,9 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
         const sig = content[2]
         const sigVer = content[3]
         const signer = content[4].split(':')[0]
-        const version = content[4].split(':')[1]
+        const version = meta[0]
 
-        if (version === '1' && address0 === address && /^\w+$/.test(userId) && message0 === message && /^0x[0-9a-f]{130}/.test(sig)) {
+        if (version === '1' && address0 === address.substring(0,4) && /^\w+$/.test(userId) && message0 === message && /^0x[0-9a-f]{130}/.test(sig)) {
 
           const msgHash = utils.hashPersonalMessage(utils.toBuffer(message))
           const sgn = utils.stripHexPrefix(sig)
