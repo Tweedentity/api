@@ -35,7 +35,7 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
 
   const {tweetId, address} = req.params
 
-  if (tweetId && /^\d{18,21}$/.test(tweetId) && /^0x[0-9a-fA-F]{40}$/.test(address)) {
+  if (tweetId && /^\d{18,20}$/.test(tweetId) && /^0x[0-9a-fA-F]{40}$/.test(address)) {
 
     request
     .get(`https://twitter.com/twitter/status/${tweetId}`)

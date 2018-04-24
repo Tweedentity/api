@@ -94,7 +94,7 @@ describe('Tweedentity Api integration tests', function () {
 
 		it('should validate the params - bad twitter id too long', function () {
 			return request(app)
-				.get('/tweet/12345678901234567891/0x0123456789012345678901234567890123456789')
+				.get('/tweet/123456789012345678901/0x0123456789012345678901234567890123456789')
 				.expect('wrong-pars');
 		});
 
