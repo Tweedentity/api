@@ -42,8 +42,6 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
     .get(`https://twitter.com/twitter/status/${tweetId}`)
     .then(tweet => {
 
-      console.log(tweet.text)
-
       if (tweet.text) {
         const $ = cheerio.load(tweet.text)
 
