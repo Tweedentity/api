@@ -1,6 +1,6 @@
 'use strict'
 
-const request = require('superagent')
+const superagent = require('superagent')
 const ethUtil = require('ethereumjs-util')
 const cheerio = require('cheerio')
 const serverless = require('serverless-http')
@@ -38,9 +38,12 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
 
   if (tweetId && /^\d{18,20}$/.test(tweetId) && /^0x[0-9a-fA-F]{40}$/.test(address)) {
 
-    request
+    superagent
     .get(`https://twitter.com/twitter/status/${tweetId}`)
     .then(tweet => {
+
+      console.log(tweet.text)
+
       if (tweet.text) {
         const $ = cheerio.load(tweet.text)
 
@@ -53,7 +56,7 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
 
         const {shortAddr, message, sig, signer, signame, version} = data
 
-        if (version === '1' && shortAddr === address.substring(0, 4) && /^\w+$/.test(userId) && message === `twitter/${userId}@tweedentity` && /^0x[0-9a-f]{130}/.test(sig)) {
+        if (version === '1' && shortAddr === address.substring(0, 4) && /^\w+$/.test(userId) && message === `twitter/${userId}` && /^0x[0-9a-f]{130}/.test(sig)) {
 
           if (utils.verify(address, message, sig, signer, signame)) {
             db.put(userId, screenName, name, address, (err) => {
@@ -65,7 +68,7 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
           } else respond('wrong-sig') // wrong utils
         } else respond('wrong-tweet') // wrong tweet
 
-      }
+      }  else respond('no-tweet') // no tweet
     })
     .catch((err) => {
       console.log('Error', err)

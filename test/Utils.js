@@ -6,7 +6,7 @@ const fixtures = require('./fixtures')
 describe('Utils', function () {
 
   let tweet1
-	let tweet2
+  let tweet2
 
 
   describe('deconstructTweet', function () {
@@ -39,19 +39,18 @@ describe('Utils', function () {
 
   describe('verify', function () {
 
-		it('should verify a web3 signature', () => {
+    it('should verify a web3 signature', () => {
 
-      const {shortAddr, message, sig, signer, signame, version} = tweet1
+      const {message, sig, signer, signame} = tweet1
       assert(utils.verify(fixtures.web3.address, message, sig, signer, signame) === true)
-		})
+    })
 
     it('should verify a MEW signature', () => {
 
-      const {shortAddr, message, sig, signer, signame, version} = tweet2
+      const {message, sig, signer, signame} = tweet2
       assert(utils.verify(fixtures.MEW.address, message, sig, signer, signame) === true)
     })
 
   })
 
-
-});
+})
