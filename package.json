@@ -7,7 +7,7 @@
   "author": "Francesco Sullo <francesco@sullo.co>",
   "scripts": {
     "test": "mocha --recursive test",
-    "startLocal": "serverless offline start",
+    "local": "serverless offline start",
     "deploy": "sls deploy"
   },
   "devDependencies": {

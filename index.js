@@ -4,18 +4,21 @@ const superagent = require('superagent')
 const ethUtil = require('ethereumjs-util')
 const cheerio = require('cheerio')
 const serverless = require('serverless-http')
+const path = require('path')
 
 const express = require('express')
 const app = express()
 
 const utils = require('./lib/Utils')
-const db = require('./db')
+const db = require('./lib/db')
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Tweedentity API')
 })
 
-app.get('/tweeter/:userId', (req, res) => {
+app.get('/twitter/:userId', (req, res) => {
 
   db.get(req.params.userId, (error, result) => {
     if (error) {
@@ -27,7 +30,7 @@ app.get('/tweeter/:userId', (req, res) => {
   })
 })
 
-app.get('/tweet/:tweetId/:address', (req, res) => {
+app.get('/twitter/:tweetId/:address', (req, res) => {
 
   function respond(err, val) {
     if (err) console.log('Error', err)
@@ -57,7 +60,8 @@ app.get('/tweet/:tweetId/:address', (req, res) => {
         if (version === '1' && shortAddr === address.substring(0, 4) && /^\w+$/.test(userId) && message === `twitter/${userId}` && /^0x[0-9a-f]{130}/.test(sig)) {
 
           if (utils.verify(address, message, sig, signer, signame)) {
-            db.put(userId, screenName, name, address, (err) => {
+            const lastUpdate = Math.round(Date.now()/1000)
+            db.put(userId, screenName, name, address, lastUpdate, (err) => {
               if (err) {
                 console.log('Error', err)
               }
