@@ -57,7 +57,7 @@ app.get('/twitter/:tweetId/:address', (req, res) => {
 
         const {shortAddr, message, sig, signer, signame, version} = data
 
-        if (version === '1' && shortAddr === address.substring(0, 4) && /^\w+$/.test(userId) && message === `twitter/${userId}` && /^0x[0-9a-f]{130}/.test(sig)) {
+        if (version === '1' && RegExp(`^${shortAddr}`).test(address) && /^\w+$/.test(userId) && message === `twitter/${userId}` && /^0x[0-9a-f]{130}/.test(sig)) {
 
           if (utils.verify(address, message, sig, signer, signame)) {
             const lastUpdate = Math.round(Date.now()/1000)
